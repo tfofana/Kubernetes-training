@@ -1,0 +1,100 @@
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Connaissances de bases  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+NB: Kubernetes fonctionne sur la notion d'objet: un objet c'est une ressource qu'on peut créér dans kubernetes
+
+(1/7) *Un Pod: est la plus petite unité gérable de kubernetes à l'aide de cet objet on pourra héberger différent conteneur. il contient l'environnement qui va exécuter un ou plrs  conteneurs:
+- plus pétite unité d'exécution
+- un espace réseau
+- un espace volume
+- des données éphèmeres
+
+(2/7) *Un Replicaset: c'est de maintenir un nombre minimal de pod (Scalabilité et Résilience). Dès qu'il y a suppression il recrée un autre
+
+(3/7) *Deployment: permet de gérer les différents réplicasets qui vont gérer l'application en plusieurs versions.
+ la montée en version et le Rollback:
+  . Update Software (rolling) : revenir sur une version antérieure
+  . Update Replicaset(scaling): montée en charge 
+NB: Grâce à l'objet de type deployment, on peut spécifier qu'on veut passer de 2 à 3 replicas, il va donc immédiatement le faire.
+
+Remarque: Dans les environnements de production il est conseillé de ne deployer les objets à partir d'objet de type Deployment.
+
+(4/7) * Kubectl : est l'utilitaire de ligne de commande de kubernetes.(façcon : Impérative ou Déclarative)
+  Syntaxe: kubectl <action>     <TYPE D'OBJETS>       <NOM D'OBJETS>      
+                     get            Pod                  nginx
+                   delete        replicaset
+                   create        Deployment
+                   apply
+
+(5/7) * Le manifest est objet yaml qui contient la description de l'objet que nous voulons créér,mettre à jour , déployer.
+. Versionning du code
+.Partage des manifests
+.Iac
+.kubectl apply -f <nom_du_manifest.yaml>
+
+
+
+
+(6/7) *Variable d'environnement 
+la variable d'environnement a pour but de fournir à l'application un certain nombre de variable permettant ainsi de dynamiser son comportement, de modifier la façon dont l'application va nous répondre.
+
+NB: lorsqu'on définit une variable d'environnement il faut définir 2 choses:
+- le nom de la variable d'environnement:  - name
+- la valeur de la variable d'environnement: value
+Cela permet de customizer le déployment de nos pods
+
+(7/7)*Type de Variable d’environnement
+Il en existe trois types.
+
+******************************************************TP-2 : Déployez vos premiers applications**************************************************************************************
+Exercice: 
+. Ecrivez un manifest pod.yaml pour déployer un pod avec l'image mmumshad/simple-webapp-color en précisant que la couleur souhaitée est le rouge.
+. Lancez votre pod et vérifiez qu'il est bien en cours d'exécution
+. Exposez votre pod en utilisant la commande kubectl port-forward <nom de votre pod> 8080:8080 --address 0.0.0.0
+. Vérifiez que l'application est bien joignable en ouvrant le port 8080 de votre node
+. Ecrivez un manifest nginx-deployment.yaml pour déployer 2 replicas d'un pod nginx (en version 1.18.0)
+. Lancez le deployment, vérifier le nombre de pods et vérifiez que le deployment et le replicatset(ainsi que la version d l'image utilisée) ont été créé
+. Modifiez le fichier nginx-deployment.yml afin d'utiliser l'image nginx en version latest, appliquer la modification (kubectl apply)
+. Que se passe t'il? combien de replicasets avez-vous? Quelle est l'image utlisée par le replicaset en cours d'utilisation?
+. Supprimez toutes les ressources créées et recréez les en utilisant les commandes impératives
+. Créez un repertoire Kubernetes-training et un sous-dossier tp-0001 et copiez vos manifests à l'intérieur
+. Enfin, poussez ce dossier sur github afin de conserver tous vos fichiers
+
+
+
+
+
+# nano pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+spec:
+  containers:
+  - name: web
+    image: mmumshad/simple-webapp-color
+    ports:
+      - containerPort: 8080
+    env:
+      - name: APP_COLOR
+        value: red
+
+*************************************************************************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

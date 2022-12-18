@@ -1,0 +1,22 @@
+$ mkdir project
+$ cd project
+project $ nano pod-definition.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mytestapp-pod
+  labels: 
+    app: mytestapp
+    type: front-end
+spec:
+  containers:
+  - image: nginx
+    name: nginx-container
+
+project $ kubectl get pod
+project $ kubectl create -f pod-definition.yaml
+
+############################ Describe pod #####################################
+project $ kubectl describe pod mytestapp-pod | more
+

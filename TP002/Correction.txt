@@ -1,0 +1,43 @@
+1. Création de la spécification
+La spécification, définie dans le fichier whoami.yaml, est la suivante:
+
+$ nano whoami.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: whoami
+spec:
+  containers:
+  - name: whoami
+    image: containous/whoami
+
+2. Lancement du Pod
+Le Pod peut être créé avec la commande suivante:
+
+$ kubectl apply -f whoami.yaml
+
+3. Vérification
+La commande suivante permet de lister les Pods présent:
+$ kubectl get pods
+
+4. Details du Pod
+Les details d'un Pod, dont l'image utilisée par le container whoami, peuvent être obtenus avec la commande suivante:
+$ kubectl describe pod whoami
+$ kubectl describe po/whoami
+
+NB: Il est également possible d'obtenir la spécification du Pod avec la commande suivante dans laquelle -o yaml permet de spécifier le format de sortie.
+
+$ kubectl get po/whoami -o yaml
+
+5. Accès à l'application via un port-forward
+Depuis un premier terminal on lance la commande suivante:
+$ kubectl port-forward whoami 8888:80
+
+Depuis un second terminal, vérifiez que l'application est accessible sur localhost depuis le port 8888:
+$ curl localhost:8888
+
+6. Suppression du Pod
+$ kubectl delete po/whoami
+
+

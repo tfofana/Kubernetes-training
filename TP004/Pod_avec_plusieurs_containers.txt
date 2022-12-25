@@ -1,0 +1,47 @@
+Pod avec plusieurs containers
+
+. Exemple avec Wordpress
+. Définition de 2 containers dans le même pod
+   * moteur Wordpress
+   * base de données MySQL
+. Définition d'un volume pour la persistence des donnnées de la base
+   * type emptyDir: associé au cycle de vie du Pod
+
+Note: ce n'est pas un setup de production car non scalable
+
+$ nano wordpress-pod.yaml
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wordpress
+spec:
+  containers:
+  - name: wordpress
+    image: wordpress:6.1-apache
+    env:
+    - name: WORDPRESS_DB_PASSWORD
+      value: mysqlpwd
+    - name: WORDPRESS_DB_HOST
+      value: 127.0.0.1
+  - name: mysql
+    image: mysql:8.0.31
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: mysqlpwd
+    volumeMounts:
+    - name: data
+      mountPath: /var/lib/mysql
+   volumes:
+   - name: data
+     emptyDir: {}
+
+# Création du pod
+
+$ kubectl create -f wordpress-pod.yaml
+
+$ kubectl get pods
+
+kubectl port-forward wordpress 8080:80
+  

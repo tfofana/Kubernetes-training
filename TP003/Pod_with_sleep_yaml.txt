@@ -1,0 +1,31 @@
+Exercice:Création pod avec l'utilisation de sleep
+
+Créez un fichier yaml debug.yaml définissant un Pod ayant les propriétés suivantes:
+nom du Pod: debug
+image du container: alpine
+nom du container: debug
+commande qui sera lancé dans ce conteneur sleep=10000
+
+
+--------------------------Correction:-------------------------------------------
+
+$ nano debug.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+spec:
+  containers:
+  - image: alpine
+    name: debug
+    command:
+    - "sleep"
+    - "10000"
+$ kubectl apply -f debug.yaml
+$ kubectl get po
+
+lancer un shell intéractif dans le conteneur alpine
+
+$ kubectl exec -t -i debug --sh 
+

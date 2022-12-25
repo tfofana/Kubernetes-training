@@ -1,0 +1,6 @@
+Exercise:
+Create a new pod called admin-pod with image busybox.
+Allow the pod to be able to set system_time.
+The container should sleep for 3200 seconds.
+
+# kubectl run admin-pod --image=busybox --command sleep 3200 --dry-run=client -o yaml

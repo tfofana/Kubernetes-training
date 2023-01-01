@@ -1,0 +1,51 @@
+################# on va créér un pod nommé pod.yaml avec pour nom=vote , image=instavote/vote ########################
+$ nano pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vote
+  labels:
+    app: vote
+spec:
+  containers:
+  - name: vote
+    image: instavote/vote
+    ports:
+    - containerPort: 80
+
+$kubectl apply -f pod.yaml
+
+
+############### On va créér un service qui va consommer les pods avec labels app=vote ################################
+$ nano svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote
+spec:
+  selector:
+    app: vote
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+
+$ kubectl apply -f svc.yaml
+
+
+########################"On va lancer un pod nommé db1 intéractif basé sur une image alpine et tester l'application vote ########
+$ kubectl run db1 -ti --image=alpine
+/ # 
+/ # apk add -u curl
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.17/main/x86_64/APKINDEX.tar.gz
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.17/community/x86_64/APKINDEX.tar.gz
+(1/5) Installing ca-certificates (20220614-r3)
+(2/5) Installing brotli-libs (1.0.9-r9)
+(3/5) Installing nghttp2-libs (1.51.0-r0)
+(4/5) Installing libcurl (7.87.0-r0)
+(5/5) Installing curl (7.87.0-r0)
+Executing busybox-1.35.0-r29.trigger
+Executing ca-certificates-20220614-r3.trigger
+OK: 9 MiB in 20 packages
+
+/ # curl http://vote      ## pour tester notre application vote ###

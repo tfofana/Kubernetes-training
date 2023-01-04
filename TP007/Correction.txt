@@ -1,0 +1,68 @@
+1.Création d'un Pod
+
+$ nano whoami.yaml
+### la spécification du Pod est la suivante:
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: whoami
+  labels:
+    app: whoami
+spec:
+  containers:
+  - image: containous/whoami
+    name: whoami
+### La commande suivante permet de créer le Pod:
+$ kubectl apply -f whoami.yaml
+
+2-Définition d'un service de type NodePort
+
+$ nano whoami-np.yaml
+
+La spécification du service demandé est la suivante:
+
+apiVersion: v1
+kind: Service
+metadata: 
+  name: whoami-np
+  labels: 
+    app: whoami
+spec:
+  selector:
+    app:whoami
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 31000
+
+###La commande suivante permet de lancer le Service:
+$ kubectl apply -f whoami-np.yaml
+
+3.$kubectl get nodes -o wide
+
+4-Cleanup
+## Les ressources peuvent être supprimées avec les commandes suivantes:
+
+$ kubectl delete po/whoami
+$ kubectl delete svc/whoami-np
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

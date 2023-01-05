@@ -1,0 +1,15 @@
+# Création d'un Pod
+
+$ kubectl run whoami --image containous/whoami
+
+Remarque: Si nous avons un pod déjà créé que nous voulons exposer(exemple le pod whoami):
+# Exposition via un service de type NodePort (dry run)
+$ kubectl expose pod whoami --type=NodePort --port=8080 --target-port=80 --dry-run=client -o yaml
+
+#### Une autre commande pour créér est l'utilisation :
+
+$ kubectl create service nodeport whoami3 --tcp 8080:80 --dry-run=client -o yaml
+
+### Une autre commande qui permet de créer un pod et de l'exposer
+
+$ kubectl run db --image=mongo:4.2 --port=27017 --expose --dry-run=client -o yaml 

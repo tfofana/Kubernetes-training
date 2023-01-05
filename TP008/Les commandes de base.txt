@@ -1,0 +1,18 @@
+# Création d'un service
+
+$ kubectl apply -f PATH_SPECIFICATION
+$ kubectl expose ...
+$ kubectl create service ...
+
+# Liste de l'ensemble des services 
+$ kubectl get service / kubectl get svc 
+
+# Principales informations concernant un service
+$ kubectl get svc/SERVICE_NAME
+
+# Informations détaillées d'un service
+$ kubectl describe svc SERVICE_NAME
+
+
+# Suppression d'un service
+$ kubectl delete svc/SERVICE_NAME

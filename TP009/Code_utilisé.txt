@@ -1,0 +1,83 @@
+
+1. Création d'un Deployment
+
+La spécification, définie dans le fichier ghost_deployment.yaml est la suivante:
+$ nano ghost_deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost
+spec: 
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ghost
+  template:
+    metadata:
+      labels: 
+        app: ghost
+    spec:
+      containers:
+      - name: ghost
+        image: ghost:4
+        ports:
+        - containerPort: 2368
+
+$ kubectl apply -f ghost_deployment.yaml 
+
+2. Status du Deployment
+La commande suivante permet d'obtenir le status du Deployment:
+
+centos@k8s:~$ kubectl get deploy ou kubectl get deploy ghost
+
+centos@k8s:~$ kubectl get deploy
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+ghost   3/3     3            3           9s
+
+3. Status des Pods associés
+La commande suivante permet de lister les Pods qui tournent sur le cluster:
+
+centos@k8s:~$ kubectl get po
+
+NAME                     READY   STATUS    RESTARTS   AGE
+ghost-65bbfbf5dd-r5hp7   1/1     Running   0          2m50s
+ghost-65bbfbf5dd-tk8n4   1/1     Running   0          2m50s
+ghost-65bbfbf5dd-vwn84   1/1     Running   0          2m50s
+
+NB: On voit que les 3 Pods relatifs au Deployment ghost sont listés. Ils sont tous les 3 actifs.
+
+4. Exposition des Pods du Deployment
+Dans un fichier ghost_service.yaml nous définissons la spécification suivante:
+
+centos@k8s:~$ nano ghost_service.yaml
+
+centos@k8s:~$ kubectl apply -f ghost_service.yaml
+service/ghost-np created
+
+centos@k8s:~$ kubectl get svc
+centos@k8s:~$ kubectl get svc
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+ghost-np     NodePort    10.102.255.231   <none>        80:31001/TCP     55s
+
+centos@k8s:~$ kubectl get nodes -o wide
+NAME       STATUS   ROLES           AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE               KERNEL-VERSION   CONTAINER-RUNTIME
+minikube   Ready    control-plane   44d   v1.25.3   192.168.59.100   <none>        Buildroot 2021.02.12   5.10.57          docker://20.10.20
+
+
+centos@k8s:~$ kubectl get deploy,rs,po
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/ghost   3/3     3            3           27m
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/ghost-65bbfbf5dd   3         3         3       27m
+
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/ghost-65bbfbf5dd-r5hp7   1/1     Running   0          27m
+pod/ghost-65bbfbf5dd-tk8n4   1/1     Running   0          27m
+pod/ghost-65bbfbf5dd-vwn84   1/1     Running   0          27m
+
+5-Cleanup
+
+centos@k8s:~$ kubectl delete deploy ghost
+centos@k8s:~$ kubectl delete svc ghost-np 

@@ -11,7 +11,7 @@ spécification du Pod:
 
 label app: ghost
 
-un container nommé ghost basé sur l'image ghost:4 et exposant le port 2368
+Un container nommé ghost basé sur l'image ghost:4 et exposant le port 2368.
 
 Créez ensuite la ressource spécifiée.
 

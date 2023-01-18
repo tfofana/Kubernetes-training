@@ -1,39 +1,68 @@
 Exercice:
 1. Création
 Les commandes suivantes permettent de créer les namespaces developpement et production:
-$ kubectl create namespace developement
-$ kubectl create namespace production
+centos@k8s:~$ kubectl create namespace developement
+namespace/developement created
 
+$ kubectl create namespace production
+centos@k8s:~$ kubectl create namespace production
+namespace/production created
 
 2-Listez les namespaces présents:
 $ kubectl get namespace
 
-
 3-Création de Deployments
 
 La commande suivante permet de créer le Deployment www-0 basé sur nginx:1.16-alpine dans le namespace par default:
-$ kubectl create deploy www-0 --image nginx:1.16-alpine
+centos@k8s:~$ kubectl create deploy www-0 --image nginx:1.16-alpine
+deployment.apps/www-0 created
+
 
 La commande suivante permet de créer le Deployment www-1 basé sur nginx:1.16-alpine dans le namespace development:
-$ kubectl create deploy www-1 --image nginx:1.16-alpine --namespace developpement
+centos@k8s:~$ kubectl create deploy www-1 --image nginx:1.16-alpine --namespace developement
+deployment.apps/www-1 created
 
 La commande suivante permet de créer le Deployment www-2 basé sur nginx:1.16-alpine dans le namespace production:
-$ kubectl create deploy www-2 --image nginx:1.16-alpine --namespace production
+centos@k8s:~$  kubectl create deploy www-2 --image nginx:1.16-alpine --namespace production
+deployment.apps/www-2 created
 
 4. Répartition des ressources
 La commande suivante permet de lister l'ensemble des Deployments et Pods
 
 $ kubectl get deploy,po --all-namespaces
+centos@k8s:~$ kubectl get deploy,po --all-namespaces
+NAMESPACE      NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+default        deployment.apps/www-0     1/1     1            1           6m18s
+developement   deployment.apps/www-1     1/1     1            1           2m44s
+kube-system    deployment.apps/coredns   1/1     1            1           62m
+production     deployment.apps/www-2     1/1     1            1           79s
+
+NAMESPACE      NAME                                   READY   STATUS    RESTARTS   AGE
+default        pod/www-0-7875cf9cb5-jnpxd             1/1     Running   0          6m17s
+developement   pod/www-1-c866898c6-vttwc              1/1     Running   0          2m44s
+kube-system    pod/coredns-565d847f94-klhkh           1/1     Running   0          62m
+kube-system    pod/etcd-minikube                      1/1     Running   0          62m
+kube-system    pod/kube-apiserver-minikube            1/1     Running   0          62m
+kube-system    pod/kube-controller-manager-minikube   1/1     Running   0          62m
+kube-system    pod/kube-proxy-wpfz8                   1/1     Running   0          62m
+kube-system    pod/kube-scheduler-minikube            1/1     Running   0          62m
+kube-system    pod/storage-provisioner                1/1     Running   0          62m
+production     pod/www-2-7d6bd5799-kjnkk              1/1     Running   0          79s
 
 5. Suppression
 La commande suivante permet de supprimer les namspaces developpement,production et le deployment www-0:
-$ kubectl delete ns/developpement, ns/production
-$ kubectl delete deploy/www-0
+$ kubectl delete ns developement, ns production
+centos@k8s:~$ kubectl delete ns developement, ns production
+namespace "developement" deleted
+namespace "production" deleted
 
+centos@k8s:~$ kubectl delete deploy/www-0
+deployment.apps "www-0" deleted
 
 Listez les Deployments et les Pods présents:
-$ kubectl get deploy,po
 
+centos@k8s:~$ kubectl get deploy,po
+No resources found in default namespace.
 
 
 Remarque: Nous pouvons voir que seuls ceux qui ont été créées dans le namespace default sont présents. Les ressources présentes dans les namespaces development et production ont été supprimées avec la suppression du namespace.

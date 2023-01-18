@@ -1,0 +1,39 @@
+Exercice:
+1. Création
+Les commandes suivantes permettent de créer les namespaces developpement et production:
+$ kubectl create namespace developement
+$ kubectl create namespace production
+
+
+2-Listez les namespaces présents:
+$ kubectl get namespace
+
+
+3-Création de Deployments
+
+La commande suivante permet de créer le Deployment www-0 basé sur nginx:1.16-alpine dans le namespace par default:
+$ kubectl create deploy www-0 --image nginx:1.16-alpine
+
+La commande suivante permet de créer le Deployment www-1 basé sur nginx:1.16-alpine dans le namespace development:
+$ kubectl create deploy www-1 --image nginx:1.16-alpine --namespace developpement
+
+La commande suivante permet de créer le Deployment www-2 basé sur nginx:1.16-alpine dans le namespace production:
+$ kubectl create deploy www-2 --image nginx:1.16-alpine --namespace production
+
+4. Répartition des ressources
+La commande suivante permet de lister l'ensemble des Deployments et Pods
+
+$ kubectl get deploy,po --all-namespaces
+
+5. Suppression
+La commande suivante permet de supprimer les namspaces developpement,production et le deployment www-0:
+$ kubectl delete ns/developpement, ns/production
+$ kubectl delete deploy/www-0
+
+
+Listez les Deployments et les Pods présents:
+$ kubectl get deploy,po
+
+
+
+Remarque: Nous pouvons voir que seuls ceux qui ont été créées dans le namespace default sont présents. Les ressources présentes dans les namespaces development et production ont été supprimées avec la suppression du namespace.
